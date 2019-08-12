@@ -22,8 +22,8 @@ const typeDefs = gql`
 
   type Author {
     id: ID!
-    name: String!
-    books: [Book!]!
+    name: String
+    bookCount: Int
   }
 
   type Mutation {
@@ -48,7 +48,14 @@ const resolvers = {
 
       return books
     },
-    allAuthors: () => authors
+
+    allAuthors: () => {
+      authors.map(a => {
+        let bookCount = books.filter(book => book.author === a.name)
+        a.bookCount = bookCount.length
+      })
+      return authors
+    }
   },
 
   Mutation: {
